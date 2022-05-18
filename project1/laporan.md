@@ -30,18 +30,20 @@ Dataset ini berisi 5110 record dengan 12 field. Field yang ada pada dataset ini 
 - stroke: field target, status stroke pasien. 0 berarti tidak, 1 berarti iya
 ### Tahapan Data Understanding ###
 Tahap-tahap yang dilakukan dalam memahami data, adalah:
-3. memvisualisasikan fitur numerik menggunakan boxplot dan menghapus outlier
-4. memvisualisasikan fitur kategorik menggunakan barplot dan menghapus kategori yang tidak memberikan insight berguna
-5. memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan barplot
-7. memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap
-8. menghapus fitur numerik yang tidak berpengaruh terhadap fitur target (<0.1)
+- memvisualisasikan fitur numerik menggunakan boxplot
+- memvisualisasikan fitur kategorik menggunakan barplot
+- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan barplot
+- memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap
 
 ## Data Preparation ##
 Tahap-tahap yang dilakukan dalam data preparation, adalah:
-1. menghapus field id
-2. menghapus missing value
-3. 6. menghapus fitur kategorik yang tidak berpengaruh terhadap fitur target (fitur dengan rerata risiko stroke setara untuk tiap kategori)
-4. OneHotEncode. Tahap ini adalah tahapan encode data dengan metode OneHotEncode. Fitur-fitur kategorik tentu tidak bisa langsung dimasukkan ke model untuk dipelajari, karena model hanya menerima data-data kuantitatif. Agar data kategorik berubah menjadi data kuantitatif, encoding harus dilakukan. Metode OneHotEncode digunakan, karena data kategorik yang diencoding adalah data nominal (tidak ada tingkatan).
+- menghapus field id
+- menghapus missing value
+- menghapus outlier
+- menghapus kategori yang tidak memberikan insight berguna dari sebuah fitur
+- menghapus fitur kategorik yang tidak berpengaruh terhadap fitur target (fitur dengan rerata risiko stroke setara untuk tiap kategori)
+- menghapus fitur numerik yang tidak berpengaruh terhadap fitur target (<0.1)
+- OneHotEncode. Tahap ini adalah tahapan encode data dengan metode OneHotEncode. Fitur-fitur kategorik tentu tidak bisa langsung dimasukkan ke model untuk dipelajari, karena model hanya menerima data-data kuantitatif. Agar data kategorik berubah menjadi data kuantitatif, encoding harus dilakukan. Metode OneHotEncode digunakan, karena data kategorik yang diencoding adalah data nominal (tidak ada tingkatan).
 5. Split dataset. Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup melihat dataset yang tidak terlalu besar.
 6. Normalisasi. Metode normalisasi yang digunakan adalah Min Max Scaler, yaitu normalisasi yang mengubah nilai menjadi berada pada rentang 0 hingga 1. Sebuah nilai akan ditampilkan sebagai rasio antara selisih nilai tersebut dengan nilai minimal terhadap selisih nilai maksimal dengan nilai minimal.
 

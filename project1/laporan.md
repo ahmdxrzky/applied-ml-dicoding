@@ -31,15 +31,27 @@ Dataset ini berisi 5110 record dengan 12 field. Field yang ada pada dataset ini 
 ### Tahapan Data Understanding ###
 Tahap-tahap yang dilakukan dalam memahami data, adalah:
 - memvisualisasikan fitur numerik menggunakan boxplot
+![Boxplot Fitur Age](./boxplot_age.png) <br>
+![Boxplot Fitur Average Glucose Level](./boxplot_avg_glucose_level.png) <br>
+![Boxplot Fitur BMI](./boxplot_bmi.png)
 - memvisualisasikan fitur kategorik menggunakan barplot
-- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan barplot
+![Barplot Fitur Gender](./barplot_gender.png) <br>
+![Barplot Fitur Ever Married](./barplot_ever_married.png) <br>
+![Barplot Fitur Work Type](./barplot_work_type.png) <br>
+![Barplot Fitur Residence Type](./barplot_residence_type.png) <br>
+![Barplot Fitur Smoking Status](./barplot_smoking_status.png)
+- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan catplot
+![Catplot Fitur Gender terhadap Fitur Stroke](./catplot_gender.png) <br>
+![Catplot Fitur Ever Married terhadap Fitur Stroke](./catplot_ever_married.png) <br>
+![Catplot Fitur Work Type terhadap Fitur Stroke](./catplot_work_type.png) <br>
+![Catplot Fitur Residence Type terhadap Fitur Stroke](./catplot_residence_type.png) <br>
+![Catplot Fitur Smoking Status terhadap Fitur Stroke](./catplot_smoking_status.png)
 - memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap
+![Heatmap](./heatmap.png)
 
 ## Data Preparation ##
 Tahap-tahap yang dilakukan dalam data preparation, adalah:
-- menghapus field id
-- menghapus missing value
-- menghapus outlier
+- Data Cleaning. Pada tahap ini, field id dihapus karena hanya berisi primary key yang tidak akan memengaruhi diagnosis stroke. Pada tahap ini juga missing value dan outlier dihapus. Outlier dapat dideteksi dari visualisasi boxplot pada tahap Data Understanding.
 - menghapus kategori yang tidak memberikan insight berguna dari sebuah fitur
 - menghapus fitur kategorik yang tidak berpengaruh terhadap fitur target (fitur dengan rerata risiko stroke setara untuk tiap kategori)
 - menghapus fitur numerik yang tidak berpengaruh terhadap fitur target (<0.1)

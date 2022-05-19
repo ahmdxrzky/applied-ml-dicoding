@@ -10,7 +10,7 @@ Masalah yang diangkat pada proyek ini berada pada domain **Kesehatan**. Menurut 
 "Pembuatan model dengan pendekatan Machine Learning untuk diagnosis penyakit stroke."
 ### Solution Statements ###
 - Membuat 2 model dari pendekatan Machine Learning untuk diagnosis penyakit stroke
-- Mengevaluasi model terbaik dengan membandingkan nilai mean squared error dan accuracy dari tiap model.
+- Mengevaluasi model terbaik dengan membandingkan nilai fittingn score dan accuracy dari tiap model. Metrik accuracy menjadi satisficing metric dan metrik fitting score menjadi optimizing metric.
 
 ## Data Understanding ##
 Dataset yang digunakan dalam proyek ini adalah **Stroke Prediction Dataset**. Dataset ini dapat diunduh pada tautan https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset.
@@ -94,7 +94,7 @@ Beberapa hal yang dilakukan pada tahap ini, adalah:
   Gambar 16 Fitur ever_married setelah encoding <br>
   ![After Encoding](./ever_married_after.png) <br>
 - Split dataset <br>
-  Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup mengingat dataset tidak terlalu besar.
+  Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup mengingat dataset tidak terlalu besar. Parameter stratify didefinisikan setara dengan fitur target, agar proporsi label pada data train dan test setara dengan proporsi label pada dataset keseluruhan.
 - Normalisasi <br>
   Normalisasi mengubah nilai dari suatu fitur menjadi berada pada rentang 0 hingga 1. Sebuah nilai akan ditampilkan sebagai rasio antara selisih nilai tersebut dengan nilai minimal fitur dan selisih nilai maksimal dengan nilai minimal fitur, sebagai berikut. <br>
   ![Normalisasi](https://www.oreilly.com/library/view/regression-analysis-with/9781788627306/assets/ffb3ac78-fd6f-4340-aa92-cde8ae0322d6.png)
@@ -105,14 +105,14 @@ Model yang digunakan dalam proyek ini ada 2, yaitu KNN dan Random Forest.
 - Model KNN melakukan klasifikasi dari suatu nilai dengan melihat klasifikasi dari titik-titik yang dekat dengan nilai tersebut. Kedekatan titik-titik data dengan suatu nilai diukur dengan formula jarak euclidean. Parameter n_neighbors mendefinisikan jumlah titik terdekat yang memengaruhi klasifikasi suatu nilai. Pada proyek ini, parameter n_neighbors yang digunakan adalah 5. Artinya, klasifikasi suatu nilai bergantung pada klasifikasi dari 5 titik data terdekat dari nilai tersebut. Apabila 3 titik data terdekat diklasifikasikan sebagai kategori 1, maka nilai tersebut akan diklasifikasikan sebagai kategori 1 juga. Nilai n_neighbors tersebut dipilih agar waktu training tidak terlalu lama.
 - Model Random Forest melakukan klasifikasi dengan bantuan decision tree. Decision tree sendiri adalah metode klasifikasi suatu nilai dengan menanyakan pertanyaan-pertanyaan bertingkat mengenai kategori dari nilai tersebut. Hasil akhir dari decision tree adalah kategori klasifikasi dari nilai. Random Forest adalah metode klasifikasi yang menggabungkan hasil klasifikasi dari beberapa decision tree. Pada proyek ini, parameter n_estimators yang digunakan adalah 50. Artinya, klasifikasi suatu nilai bergantung pada klasifikasi dari 50 decision tree. Apabila 51 decision tree mengklasifikasikan nilai sebagai kategori 1, maka nilai tersebut akan diklasifikasikan sebagai kategori 1. Nilai n_estimators tersebut dipilih agar waktu training tidak terlalu lama. <br>
 
-Melalui metrik-metrik evaluasi yang digunakan, model terbaik untuk diagnosis stroke adalah model KNN. Hal ini dikarenakan nilai accuracy untuk model KNN lebih besar daripada model Random Forest. Metrik MSE agak sulit untuk digunakan sebagai evaluator, karena model KNN mengalami underfit dan model Random Forest mengalami overfit.
+Melalui metrik-metrik evaluasi yang digunakan, model terbaik untuk diagnosis stroke adalah model KNN. Hal ini dikarenakan nilai accuracy untuk model KNN dan Random Forest sudah memenuhi kriteria (>90%) dan besar nilai fitting_score (tanpa memerhatikan tanda) dari model KNN lebih kecil.
 
 ## Evaluation ##
-Metrik evaluasi yang digunakan ada 2, yaitu Mean Squarred Error dan Accuracy.
-- Metrik MSE diterapkan pada data training dan testing untuk menentukan jenis fitting data yang terjadi. MSE mengukur rerata dari kuadrat dari selisih antara hasil prediksi dengan data sebenarnya. Model yang baik harus memiliki MSE pada data training dan testing yang tidak jauh berbeda. <br>
+Metrik evaluasi yang digunakan ada 2, yaitu Fitting Score dan Accuracy. Metrik accuracy menjadi satisficing metric dan metrik fitting score menjadi optimizing metric.
+- Metrik Fitting Score adalah selisih antara nilai MSE pada data testing dengan MSE pada data training. Metrik ini menggambarkan jenis fitting data yang terjadi. MSE mengukur rerata dari kuadrat dari selisih antara hasil prediksi dengan data sebenarnya. Model dengan besar fitting score (tanpa memerhatikan tanda) paling rendah adalah model yang baik. <br>
   Gambar 17 Formula MSE: <br>
   ![MSE](https://vedexcel.com/wp-content/uploads/2020/12/MSE_Python.gif)
-- Metrik Accuracy diterapkan untuk menentukan akurasi model. Accuracy menghitung rasio antara jumlah prediksi yang benar (True Positive dan True Negative) dengan jumlah data testing. Model yang baik tentunya memiliki nilai accuracy yang besar.
+- Metrik Accuracy diterapkan untuk menentukan akurasi model. Accuracy menghitung rasio antara jumlah prediksi yang benar (True Positive dan True Negative) dengan jumlah data testing. Model dengan accuracy >90% sudah dikatakan baik pada proyek ini.
   Gambar 18 Formula Accuracy: <br>
   ![Accuracy](https://th.bing.com/th/id/OIP.XsegOFaHxkbrh5kIHoHn2wHaBX?pid=ImgDet&rs=1)
 

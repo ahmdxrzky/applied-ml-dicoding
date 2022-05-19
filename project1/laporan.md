@@ -30,34 +30,48 @@ Dataset ini berisi 5110 record dengan 12 field. Field yang ada pada dataset ini 
 - stroke: field target, status stroke pasien. 0 berarti tidak, 1 berarti iya
 ### Tahapan Data Understanding ###
 Tahap-tahap yang dilakukan dalam memahami data, adalah:
-- memvisualisasikan fitur numerik menggunakan boxplot
+- memvisualisasikan fitur numerik menggunakan boxplot <br>
 ![Boxplot Fitur Age](./boxplot_age.png) <br>
 ![Boxplot Fitur Average Glucose Level](./boxplot_avg_glucose_level.png) <br>
-![Boxplot Fitur BMI](./boxplot_bmi.png)
-- memvisualisasikan fitur kategorik menggunakan barplot
+![Boxplot Fitur BMI](./boxplot_bmi.png) <br>
+- memvisualisasikan fitur kategorik menggunakan barplot <br>
 ![Barplot Fitur Gender](./barplot_gender.png) <br>
 ![Barplot Fitur Ever Married](./barplot_ever_married.png) <br>
 ![Barplot Fitur Work Type](./barplot_work_type.png) <br>
 ![Barplot Fitur Residence Type](./barplot_residence_type.png) <br>
-![Barplot Fitur Smoking Status](./barplot_smoking_status.png)
-- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan catplot
+![Barplot Fitur Smoking Status](./barplot_smoking_status.png) <br>
+- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan catplot <br>
 ![Catplot Fitur Gender terhadap Fitur Stroke](./catplot_gender.png) <br>
 ![Catplot Fitur Ever Married terhadap Fitur Stroke](./catplot_ever_married.png) <br>
 ![Catplot Fitur Work Type terhadap Fitur Stroke](./catplot_work_type.png) <br>
 ![Catplot Fitur Residence Type terhadap Fitur Stroke](./catplot_residence_type.png) <br>
-![Catplot Fitur Smoking Status terhadap Fitur Stroke](./catplot_smoking_status.png)
-- memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap
+![Catplot Fitur Smoking Status terhadap Fitur Stroke](./catplot_smoking_status.png) <br>
+- memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap <br>
 ![Heatmap](./heatmap.png)
 
 ## Data Preparation ##
 Tahap-tahap yang dilakukan dalam data preparation, adalah:
-- Data Cleaning. Pada tahap ini, field id dihapus karena hanya berisi primary key yang tidak akan memengaruhi diagnosis stroke. Pada tahap ini juga missing value dan outlier dihapus. Outlier dapat dideteksi dari visualisasi boxplot pada tahap Data Understanding.
+### Data Cleaning ###
+Beberapa hal yang dilakukan pada tahap ini, adalah:
+- Fitur id dihapus <br>
+Hal ini dilakukan karena fitur id hanya berisi primary key (identifier unik) yang tidak akan memengaruhi diagnosis stroke.
+- Missing value dihapus
+Missing value dideteksi dengan metode .info() dan dihapus dengan metode .dropna()
+- Outlier dihapus
+Outlier dideteksi di visualisasi boxplot terhadap fitur-fitur numerik. Melalui visualisasi boxplot yang telah dilakukan sebelumnya, fitur avg_glucose_level dan bmi terdeteksi memiliki outlier. Outlier-outlier tersebut dihapus menggunakan metode IQR, dengan IQR adalah selisih antara kuartil atas dan kuartil bawah. x dikatakan sebagai outlier apabila memenuhi:
+  ```
+  x < Q1 - 1.5*IQR atau x > Q3 + 1.5*IQR
+  
+  ```
+### Feature Selection ###
 - menghapus kategori yang tidak memberikan insight berguna dari sebuah fitur
 - menghapus fitur kategorik yang tidak berpengaruh terhadap fitur target (fitur dengan rerata risiko stroke setara untuk tiap kategori)
 - menghapus fitur numerik yang tidak berpengaruh terhadap fitur target (<0.1)
+### Data Transform dan Feature Engineering ###
 - OneHotEncode. Tahap ini adalah tahapan encode data dengan metode OneHotEncode. Fitur-fitur kategorik tentu tidak bisa langsung dimasukkan ke model untuk dipelajari, karena model hanya menerima data-data kuantitatif. Agar data kategorik berubah menjadi data kuantitatif, encoding harus dilakukan. Metode OneHotEncode digunakan, karena data kategorik yang diencoding adalah data nominal (tidak ada tingkatan).
-5. Split dataset. Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup melihat dataset yang tidak terlalu besar.
+- 7. 5. Split dataset. Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup melihat dataset yang tidak terlalu besar.
 6. Normalisasi. Metode normalisasi yang digunakan adalah Min Max Scaler, yaitu normalisasi yang mengubah nilai menjadi berada pada rentang 0 hingga 1. Sebuah nilai akan ditampilkan sebagai rasio antara selisih nilai tersebut dengan nilai minimal terhadap selisih nilai maksimal dengan nilai minimal.
+
 
 ## Modeling ##
 Model yang digunakan dalam proyek ini ada 2, yaitu KNN dan Random Forest. Model KNN menggunakan jumlah neighbors sebesar 5, sedangkan model Random Forest menggunakan jumlah estimator sebesar 100. Melalui metrik-metrik evaluasi yang digunakan dan juga telah dipaparkan di notebook, model terbaik untuk diagnosis stroke adalah model KNN. Hal ini dikarenakan nilai accuracy untuk model KNN lebih besar daripada model Random Forest. Metrik MSE agak sulit untuk digunakan, karena model KNN mengalami underfit dan model Random Forest mengalami overfit.

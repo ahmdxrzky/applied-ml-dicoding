@@ -29,7 +29,7 @@ df.info()
 
 """# Data Understanding dan Data Preparation
 
-Karena sistem rekomendasi ini akan merekomendasikan film berdasarkan genrenya, maka fitur title harus unique dan berkorespondesi satu-satu terhadap fitur Genre. Cek berapa record judul film yang unique
+Karena sistem rekomendasi ini akan merekomendasikan film berdasarkan genrenya, maka fitur title harus unik. Cek berapa record judul film yang unik.
 """
 
 len(df.Series_Title.unique())
@@ -50,21 +50,10 @@ for i in range(len(df.index)):
 
 len(df.Series_Title.unique())
 
-"""Sebuah film dapat memiliki lebih dari 1 genre. Karena judul film dan genre harus berkorespondensi satu-satu, maka ekstrak fitur baru (First_genre) yang mewakili genre pertama yang tertera pada fitur Genre."""
-
-first_genre = []
-
-for i in range(len(df.index)):
-  genre_list = df["Genre"][i].split(", ")
-  first_genre.append(genre_list[0])
-
-df["First_genre"] = pd.DataFrame(first_genre)
-df
-
-"""Hapus semua fitur, kecuali Series_Title dan First_genre, karena keduanya akan menjadi fitur pembentuk sistem rekomendasi."""
+"""Hapus semua fitur, kecuali Series_Title dan Genre, karena keduanya akan menjadi fitur pembentuk sistem rekomendasi."""
 
 columns = df.columns.tolist()
-wanted_columns = ["Series_Title", "First_genre"]
+wanted_columns = ["Series_Title", "Genre"]
 
 for column in df.columns.tolist():
   if column in wanted_columns:
@@ -87,14 +76,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # Inisialisasi TfidfVectorizer
 tf = TfidfVectorizer()
  
-# Melakukan perhitungan idf pada fitur First_genre
-tf.fit(df['First_genre']) 
+# Melakukan perhitungan idf pada fitur Genre
+tf.fit(df['Genre']) 
  
 # Mapping array dari fitur index integer ke fitur Series_Title
 tf.get_feature_names_out()
 
 # Melakukan fit lalu ditransformasikan ke bentuk matrix
-tfidf_matrix = tf.fit_transform(df["First_genre"]) 
+tfidf_matrix = tf.fit_transform(df["Genre"]) 
  
 # Melihat ukuran matrix tfidf
 tfidf_matrix.shape
@@ -127,19 +116,19 @@ print('Shape:', cos_sim_dataframe.shape)
 # Melihat similarity matrix untuk tiap film
 cos_sim_dataframe.sample(6, axis=1).sample(10, axis=0)
 
-def movie_recommendations(Series_Title, similarity_data=cos_sim_dataframe, features=df[["Series_Title", "First_genre"]], n=10):
+def movie_recommendations(Series_Title, similarity_data=cos_sim_dataframe, features=df[["Series_Title", "Genre"]], n=10):
     """
     Rekomendasi Film berdasarkan kemiripannya
  
     Parameter:
     ---
-    judul_film : tipe data string (str)
-                 judul film (index kemiripan dataframe)
+    Series_Title : tipe data string (str)
+                   judul film (index kemiripan dataframe)
     similarity_data : tipe data pd.DataFrame (object)
                       Kesamaan dataframe, simetrik, dengan film sebagai 
                       indeks dan kolom
     features : tipe data pd.DataFrame (object)
-            Mengandung fitur-fitur yang digunakan untuk mendefinisikan kemiripan
+               Mengandung fitur-fitur yang digunakan untuk mendefinisikan kemiripan
     n : tipe data integer (int)
         Banyaknya jumlah rekomendasi yang diberikan
     """
@@ -161,15 +150,42 @@ def movie_recommendations(Series_Title, similarity_data=cos_sim_dataframe, featu
 
 """# Evaluation
 
-Mencari film yang mirip dan direkomendasikan setelah film X: First Class.
+Metrik evaluasi yang relevan untuk sistem rekomendasi seperti ini adalah presisi. Presisi pada proyek ini mengukur banyaknya film hasil rekomendasi yang genrenya relevan dengan genre film masukan. Untuk mempermudah penggunaan berulang, fungsi precision di buat sebagai berikut.
 """
+
+def precision(Series_Title):
+  """
+    Tingkat presisi sistem rekomendasi
+ 
+    Parameter:
+    ---
+    Series_Title : tipe data string (str)
+                   judul film yang ingin dicari hasil rekomendasinya
+    """
+  mr_df = movie_recommendations(Series_Title)
+  target_genre = df[df["Series_Title"] == Series_Title]["Genre"].tolist()
+  target_genre = target_genre[0]
+  true_counter = 0
+  
+  for name in mr_df["Genre"].tolist():
+    if name == target_genre:
+      true_counter += 1
+  
+  precision = (true_counter/mr_df.shape[0]) * 100
+  print("Tingkat presisi sistem rekomendasi dari film {}: {}%".format(Series_Title, int(precision)))
+
+"""Mencari film yang mirip dan direkomendasikan setelah film X: First Class, serta menghitung tingkat presisinya."""
 
 df[df.Series_Title.eq('X: First Class')]
 
 movie_recommendations('X: First Class')
 
-"""Mencari film yang mirip dan direkomendasikan setelah film The Kid."""
+precision("X: First Class")
+
+"""Mencari film yang mirip dan direkomendasikan setelah film The Kid, serta menghitung tingkat presisinya."""
 
 df[df.Series_Title.eq('The Kid')]
 
 movie_recommendations('The Kid')
+
+precision("The Kid")

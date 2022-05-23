@@ -98,15 +98,14 @@ Beberapa hal yang dilakukan pada tahap ini, adalah:
   Setelah data divektorisasi, maka kedekatan antar data diukur menggunakan cosine similarity. Prinsip ini didasarkan pada fakta bahwa dua titik yang dekat dapat diasumsikan sebagai titik-titik ujung dari dua vektor yang saling terpisah oleh sudut yang kecil. Persamaan yang digunakan adalah: <br>
   ![Cosine_Similarity](https://wikimedia.org/api/rest_v1/media/math/render/svg/0a4c9a778656537624a3303e646559a429868863) <br><br>
   Kemiripan antar 2 film dapat diwakili oleh similarity index yang didapatkan dari perhitungan di atas, nampak pada gambar di bawah: <br>
-  ![cos_sim](https://user-images.githubusercontent.com/99194827/169762765-65c56c2c-cb0b-4274-8d97-06b58d7b35e2.png) <br>
+  ![image](https://user-images.githubusercontent.com/99194827/169797215-b30732cf-e132-4dd2-bf2e-b316cffc6033.png) <br>
 Hasil dari modelling ini adalah:
-sistem rekomendasi film dalam bentuk fungsi yang akan menampilkan 10 film dengan similarity index paling tinggi dengan film masukan. Proses ini mengurutkan 10 besar film dengan similarity index tertinggi relatif terhadap film masukan.
+sistem rekomendasi film dalam bentuk fungsi yang akan menampilkan 10 film dengan similarity index paling tinggi dengan film masukan. Proses ini mengurutkan 10 besar film dengan similarity index tertinggi relatif terhadap film masukan. <br>
+![image](https://user-images.githubusercontent.com/99194827/169797415-0610fa31-d397-4ad5-9602-9f4befb1ce8e.png)
 
 ## Evaluation ##
-Formula metrik presisi dan recall untuk sistem rekomendasi, adalah sebagai berikut: <br>
-![presisi](https://miro.medium.com/max/3156/1*KQ0veHTnTOnBX2CeOjHaDw.png) <br><br>
-Metrik evaluasi yang relevan untuk sistem rekomendasi ini adalah presisi. Presisi menghitung tingkat kesamaan genre film-film hasil luaran dengan genre film masukan. Pada proyek ini, metrik presisi diwujudkan dalam bentuk fungsi bernama precision dengan parameter berupa string dari judul film yang ingin dicari rekomendasinya. <br><br>
-Hasil rekomendasi film X: First Class: <br>
-![first_class](https://user-images.githubusercontent.com/99194827/169763994-bb99d6d4-8922-441c-a5d8-5c7b80d77cd3.png) <br><br>
-Hasil rekomendasi film The Kid: <br><br>
-![the_kid](https://user-images.githubusercontent.com/99194827/169764113-6cb33d85-b500-4b04-938a-0278b2224133.png)
+Metrik evaluasi yang relevan untuk sistem rekomendasi ini adalah presisi. Presisi menghitung tingkat kesamaan genre film-film hasil luaran dengan genre film masukan. Formula metrik presisi untuk sistem rekomendasi, adalah sebagai berikut: <br>
+![image](https://user-images.githubusercontent.com/99194827/169797046-60a9f49e-d008-4300-a2bd-2f255483f905.png) <br><br>
+Pada proyek ini, metrik presisi diwujudkan dalam bentuk fungsi bernama precision dengan parameter berupa string dari judul film yang ingin dicari rekomendasinya. <br><br>
+Tingkat presisi hasil rekomendasi film The Kid: <br>
+![the_kid_precision](https://user-images.githubusercontent.com/99194827/169796003-3ed3ee0f-a4b0-452b-b9c6-2ee14140711b.png)

@@ -1,6 +1,6 @@
 # Laporan Proyek Machine Learning - Ahmad Rizky #
 
-## Domain Proyek ##
+## Project Overview ##
 Masalah yang diangkat pada proyek ini berada pada domain **Rekomendasi Film**. Tingginya tingkat stress manusia, terutama mereka yang tinggal di kota, menuntut orang-orang untuk dapat menghibur diri sendiri. Salah satu sarana penghiburan mandiri di kala pandemi adalah menonton film. Akan tetapi, ada banyak sekali film saat ini dan ditawarkan dalam berbagai macam genre. Oleh karena itu, sistem rekomendasi film patut untuk dibuat. Proyek ini mencoba untuk membuat sistem rekomendasi berdasarkan genre film.
 
 ## Business Understanding ##
@@ -9,7 +9,7 @@ Masalah yang diangkat pada proyek ini berada pada domain **Rekomendasi Film**. T
 ### Goal ###
 "Pembuatan model dengan pendekatan Machine Learning sebagai sistem rekomendasi film."
 ### Solution Statements ###
-Mengukur kemiripan antar film menggunakan *jaccard similarity*
+Mengukur kemiripan antar film menggunakan pendekatan ***Content-based Filtering***.
 
 ## Data Understanding ##
 Dataset yang digunakan dalam proyek ini adalah [IMDB Movies Dataset](https://www.kaggle.com/datasets/harshitshankhdhar/imdb-dataset-of-top-1000-movies-and-tv-shows). Dataset ini memiliki banyak sekali missing value pada beberapa fitur, tetapi fitur-fitur tersebut tidak digunakan untuk sistem rekomendasi ini. 
@@ -72,7 +72,7 @@ Tahap-tahap yang dilakukan dalam memahami data, adalah:
   Dari gambar di atas, nampak fitur Series_Title memiliki 1 nilai redundant.
 - melihat data dari fitur Genre <br>
   ![fitur Genre](https://user-images.githubusercontent.com/99194827/169694203-e3fbc5cc-78cf-4275-8529-0d1dc2e468bb.png) <br>
-  Terlihat bahwa 1 film bisa memiliki lebih dari 1 genre.
+  Terlihat bahwa 1 film bisa memiliki 1 atau lebih genre.
 
 ## Data Preparation ##
 Tahap-tahap yang dilakukan dalam data preparation, adalah:
@@ -82,26 +82,31 @@ Beberapa hal yang dilakukan pada tahap ini, adalah:
   Sebelumnya telah diketahui bahwa ada 1 record redundant di fitur Series_Title. <br>
   ![redundant_data](https://user-images.githubusercontent.com/99194827/169694243-e623d06d-b128-4f18-a0b6-28f63303c4ec.png) <br>
   Data redundant terjadi, karena film tersebut diremake pada tahun yang berbeda. Oleh karena itu, khusus untuk film ini, data Series_Title-nya dipadukan dengan tahun rilisnya.
-- cek missing value
+- cek missing value <br>
   ![missing_value](https://user-images.githubusercontent.com/99194827/169694503-639622f4-2ea6-4367-b573-1e0471850c62.png)
 ### Feature Selection ###
-Beberapa hal yang dilakukan pada tahap ini, adalah:
-mengekstrak fitur baru (First_genre) yang mewakili value pertama dari fitur Genre <br>
-  ![First_genre](https://user-images.githubusercontent.com/99194827/169694342-f75dd97c-c774-4407-af5a-a250eb69a120.png)
-- menghapus fitur yang tidak digunakan dalam sistem rekomendasi <br>
-  ![fitur rekomendasi](https://user-images.githubusercontent.com/99194827/169694415-67041554-b130-4f64-846e-e234e58149e1.png)
+Hal yang dilakukan pada tahap ini, adalah:
+menghapus fitur yang tidak digunakan dalam sistem rekomendasi <br>
+![fitur rekomendasi](https://user-images.githubusercontent.com/99194827/169694415-67041554-b130-4f64-846e-e234e58149e1.png)
 
-## Modeling ##
+## Modeling and Results ##
 Beberapa hal yang dilakukan pada tahap ini, adalah:
-- Konversi data dari fitur First_genre ke dalam bentuk vektor <br>
-  Proses ini dilakukan dengan fitur tfidfvectorizer. Vektor yang dihasilkan akan digunakan untuk mempermudah perhitungan kemiripan antar film.
+- Konversi data dari fitur Genre ke dalam bentuk vektor <br>
+  Proses ini dilakukan dengan kelas tfidfvectorizer. Tiap judul film bisa memiliki 1 atau lebih genre, sehingga tiap film dapat direpresentasikan sebagai vektor dengan jumlah dimensi setara dengan jumlah genre. Kelas tfidfvectorizer akan memberikan bobot untuk tiap genre bagi tiap film. <br>
+  ![tfidfvectorizer](https://user-images.githubusercontent.com/99194827/169762446-102cd00c-a41a-4f23-beb2-bd86a9b1af5e.png)
 - Menghitung kemiripan antar film menggunakan perhitungan Cosine Similarity <br>
-  Setelah data divektorisasi, maka kedekatan antar data diukur menggunakan cosine similarity. Prinsip ini didasarkan pada fakta bahwa dua titik ujung vektor yang dekat adalah dua titik yang memiliki sudut terkecil. Persamaan yang digunakan adalah:
-  ![Cosine_Similarity](https://wikimedia.org/api/rest_v1/media/math/render/svg/0a4c9a778656537624a3303e646559a429868863)
-- Mendefinisikan fungsi rekomendasi film yang akan menampilkan 10 film dengan similarity index paling tinggi dengan film yang diinput <br>
-  Proses ini mengurutkan 10 besar film dengan similarity index tertinggi relatif terhadap film yang menjadi input atau masukan.
+  Setelah data divektorisasi, maka kedekatan antar data diukur menggunakan cosine similarity. Prinsip ini didasarkan pada fakta bahwa dua titik yang dekat dapat diasumsikan sebagai titik-titik ujung dari dua vektor yang saling terpisah oleh sudut yang kecil. Persamaan yang digunakan adalah: <br>
+  ![Cosine_Similarity](https://wikimedia.org/api/rest_v1/media/math/render/svg/0a4c9a778656537624a3303e646559a429868863) <br><br>
+  Kemiripan antar 2 film dapat diwakili oleh similarity index yang didapatkan dari perhitungan di atas, nampak pada gambar di bawah: <br>
+  ![cos_sim](https://user-images.githubusercontent.com/99194827/169762765-65c56c2c-cb0b-4274-8d97-06b58d7b35e2.png) <br>
+Hasil dari modelling ini adalah:
+sistem rekomendasi film dalam bentuk fungsi yang akan menampilkan 10 film dengan similarity index paling tinggi dengan film masukan. Proses ini mengurutkan 10 besar film dengan similarity index tertinggi relatif terhadap film masukan.
 
 ## Evaluation ##
-Testing yang dilakukan adalah menggunakan fungsi rekomendasi kepada 2 film untuk ditampilkan 10 film yang memiliki similarity index tertinggi dengan masing-masing film. <br>
-![first_class](https://user-images.githubusercontent.com/99194827/169695058-836ebc55-be8e-46be-bf9b-a13397752960.png) <br>
-![the_kid](https://user-images.githubusercontent.com/99194827/169695118-33cf1d98-1881-4a58-bfe9-fbedcffa4c02.png)
+Formula metrik presisi dan recall untuk sistem rekomendasi, adalah sebagai berikut: <br>
+![presisi](https://miro.medium.com/max/3156/1*KQ0veHTnTOnBX2CeOjHaDw.png) <br><br>
+Metrik evaluasi yang relevan untuk sistem rekomendasi ini adalah presisi. Presisi menghitung tingkat kesamaan genre film-film hasil luaran dengan genre film masukan. Pada proyek ini, metrik presisi diwujudkan dalam bentuk fungsi bernama precision dengan parameter berupa string dari judul film yang ingin dicari rekomendasinya. <br><br>
+Hasil rekomendasi film X: First Class: <br>
+![first_class](https://user-images.githubusercontent.com/99194827/169763994-bb99d6d4-8922-441c-a5d8-5c7b80d77cd3.png) <br><br>
+Hasil rekomendasi film The Kid: <br><br>
+![the_kid](https://user-images.githubusercontent.com/99194827/169764113-6cb33d85-b500-4b04-938a-0278b2224133.png)

@@ -1,180 +1,179 @@
-# Laporan Proyek Machine Learning - Ahmad Rizky #
+# Stroke Diagnosis #
 
-## Domain Proyek ##
-Masalah yang diangkat pada proyek ini berada pada domain **Kesehatan**. Menurut Riskesdas dalam Delima et al. (2016), stroke adalah penyakit penyebab kematian tertinggi di Indonesia, yaitu sebesar 15,4%. Oleh karena itu, diagnosis stroke sedari dini penting untuk dilakukan. Proyek ini mencoba untuk melakukan diagnosis stroke berdasarkan riwayat diri dan kesehatan pasien, seperti pekerjaan, tempat tinggal, level glukosa dalam darah, dan komorbid lainnya.
+## Complete Script ##
+Complete script for this project can be accessed [here](https://github.com/ahmdxrzky/applied-ml-dicoding/blob/main/project1/project1_notebook.ipynb).
+
+## Project Domain ##
+Problem being highlighted in this project is in **Health** domain. According to Riskesdas in Delima et al. (2016), stroke is the highest death-cause disease in Indonesia, which round on 15,4%. So, stroke early detection is important to be done. This project tries to do stroke diagnosis based on patient medical record, i.e. work field, neighborhood, glucose level in blood, and other comorbid disease.
 
 ## Business Understanding ##
 ### Problem Statement ###
-"Bagaimana cara diagnosis penyakit stroke menggunakan pendekatan Machine Learning?"
+"How to diagnose stroke with Machine Learning approach?"
 ### Goal ###
-"Pembuatan model dengan pendekatan Machine Learning untuk diagnosis penyakit stroke."
+"Model making with Machine Learning approach to diagnose stroke."
 ### Solution Statements ###
-- Membuat 2 model dari pendekatan Machine Learning untuk diagnosis penyakit stroke
-- Mengevaluasi model terbaik dengan membandingkan nilai fittingn score dan accuracy dari tiap model. Metrik accuracy menjadi ***satisficing metric*** dan metrik fitting score menjadi ***optimizing metric***
+- Make 2 models with Machine Learning approach to diagnose stroke
+- Evaluate best model by compare fitting score and accuracy of each model. Accuracy become ***satisficing metric***, while fitting score become ***optimizing metric***
 
 ## Data Understanding ##
-Dataset yang digunakan dalam proyek ini adalah [Stroke Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). Dataset ini sudah cukup bersih, tetapi memiliki 201 missing value pada fitur bmi.
-### Fields pada Dataset ###
-Dataset ini berisi 5110 record dengan 12 field. Gambar rangkuman mengenai dataset: <br>
+Dataset being used in this project is [Stroke Prediction Dataset](https://www.kaggle.com/datasets/fedesoriano/stroke-prediction-dataset). This dataset is clean enough, but it has 201 missing values in bmi feature.
+### Dataset's Fields ###
+This dataset contains 5110 records with 12 fields. Summary of the dataset based on its fields is shown below: <br>
 ![dataset_info](https://user-images.githubusercontent.com/99194827/169442588-e9af7f43-1b48-4502-9300-85179f33215f.png) <br><br>
-Field yang ada pada dataset ini adalah:
+Fields in this dataset are:
 - id <br>
-  isi: primary key untuk tiap record sebagai unique identifier <br>
-  tipe: integer
+  content: unique identifier <br>
+  type: integer
 - gender <br>
-  isi: jenis kelamin pasien <br>
-  distinct value: Male berarti Pria, Female berarti Wanita, Other berarti tidak diketahui <br>
-  tipe: string
+  distinct value: Male, Female, and Other <br>
+  type: string
 - age <br>
-  isi: usia pasien <br> 
-  tipe: float
+  type: float
 - hypertension <br>
-  isi: status penyakit daerah tinggi pasien <br>
-  distinct value: 0 berarti tidak, 1 berarti iya <br>
-  tipe: boolean
+  content: patient's status due to hypertension disease <br>
+  distinct value: 0 means no, 1 means having the disease <br>
+  type: boolean
 - heart_disease <br>
-  isi: status penyakit hati pasien <br>
-  distinct value: 0 berarti tidak, 1 berarti iya <br>
-  tipe: boolean
+  content: patient's status due to heart disease <br>
+  distinct value: 0 means no, 1 means having the disease <br>
+  type: boolean
 - ever_married <br>
-  isi: status perkawinan pasien <br>
-  distinct value: Yes berarti pernah, No berarti belum pernah <br>
-  tipe: string
+  content: patient's marriage status <br>
+  distinct value: Yes means ever married, No means haven't married yet <br>
+  type: string
 - work_type <br>
-  isi: pekerjaan pasien <br>
-  distinct value: children berarti anak-anak, Govt_job berarti pekerja pemerintahan, Never worked berarti belum pernah bekerja, Private berarti pekerja swasta, Self-employed berarti pekerja bebas atau pengusaha <br>
-  tipe: string
+  content: patient's work field <br>
+  distinct value: children means underage (haven't get job ever), Govt_job means employee in public sector, Never worked means haven't worked yet even in the work age, Private means employee in private sector, Self-employed means freelance or business owner <br>
+  type: string
 - Residence_type <br>
-  isi: tempat tinggal pasien <br>
-  distinct value: Rural berarti desa, Urban berarti kota <br>
-  tipe: string
+  content: patient's neighborhood type <br>
+  distinct value: Rural and Urban <br>
+  type: string
 - avg_glucose_level <br>
-  isi: rerata kadar glukosa dalam darah pasien <br>
-  tipe: float
+  content: average of glucose level in patient's blood <br>
+  type: float
 - bmi <br>
-  isi: indeks massa tubuh <br>
-  tipe: float
+  type: float
 - smoking_status <br>
-  isi: hubungan rokok dengan pasien <br>
-  distinct value: formerly smoked berarti pernah merokok tapi sudah berhenti, never smoked berarti tidak pernah merokok, smokes berarti aktif merokok, unknown berarti tidak diketahui <br>
-  tipe: string
+  content: relationship between patient and cigarettes <br>
+  distinct value: formerly smoked means have stopped from smoking, never smoked means haven't smoking ever, smokes means actively smoking, and unknown <br>
+  type: string
 - stroke <br>
-  isi: field target, status stroke pasien <br>
-  distinct value: 0 berarti tidak, 1 berarti iya <br>
-  tipe: boolean
-### Tahapan Data Understanding ###
-Tahap-tahap yang dilakukan dalam memahami data, adalah:
-- melihat deskripsi statistik dari dataset <br>
+  content: target field, patient's status due to stroke <br>
+  distinct value: 0 means no, 1 means having the disease <br>
+  type: boolean
+### Data Understanding Stages ###
+- see statistical description of the dataset <br>
   ![dataset_statistics](https://user-images.githubusercontent.com/99194827/169442667-22cf9254-7e30-46f5-a8c1-96b8b76a1037.png) <br>
-  Dari deskripsi statistik di atas, nampak fitur avg_glucose_level dan bmi memiliki nilai maksimum yang jauh dari nilai kuartil atasnya, sehingga terindikasi ada outlier.
-- memvisualisasikan fitur numerik menggunakan boxplot <br>
-  Gambar Boxplot fitur avg_glucose_level: <br>
+  From the description above, it is known that avg_glucose_level and bmi have max value that really far from its upper quartile (possibly outlier detected).
+- visualize numerical feature with boxplot <br>
+  Boxplot of avg_glucose_level: <br>
   ![boxplot_avg_glucose_level_before](https://user-images.githubusercontent.com/99194827/169442866-d5c657d2-3a1e-4cbe-88a6-e3021c1a253d.png) <br>
-  Ada outlier terdeteksi. <br><br>
-  Gambar Boxplot fitur bmi: <br>
+  There are outlier detected. <br><br>
+  Boxplot of bmi: <br>
   ![boxplot_bmi_before](https://user-images.githubusercontent.com/99194827/169442891-33919aa1-232c-4b9b-901c-c45831b720cc.png) <br>
-  Outlier sangat jelas terlihat.
-- memvisualisasikan fitur kategorik menggunakan barplot <br>
-  Gambar Barplot fitur gender: <br>
+  Outlier are strongly shown.
+- visualize categorical feature with barplot <br>
+  Barplot of gender: <br>
   ![barplot_gender](https://user-images.githubusercontent.com/99194827/169442910-c2c15298-290c-4d1a-b8d6-abb99fbd2524.png) <br>
-  Ada 3 unique value pada fitur ini. Value other tidak memberikan insight berguna untuk proyek, karena sulit menjelaskan pengaruh jenis kelamin yang tidak diketahui terhadap diagnosis stroke. <br><br>
-  Gambar Barplot fitur ever_married: <br>
+  There are 3 unique values. "Other" gives no useful insight for the project, because it's hard to explain connection between unknown gender with stroke diagnosis. <br><br>
+  Barplot of ever_married: <br>
   ![barplot_ever_married](https://user-images.githubusercontent.com/99194827/169442933-1c9f6421-9f02-4bea-8cc0-ef789424e848.png) <br>
-  Ada 2 unique value pada fitur ini. <br><br>
-  Gambar Barplot fitur work_type: <br>
+  There are 2 unique values. <br><br>
+  Barplot of work_type: <br>
   ![barplot_work_type](https://user-images.githubusercontent.com/99194827/169442947-436dcea5-32dd-494e-9666-bdb3016a2be6.png) <br>
-  Ada 5 unique value pada fitur ini. <br><br>
-  Gambar Barplot fitur Residence_type: <br>
+  There are 5 unique values. <br><br>
+  Barplot of Residence_type: <br>
   ![barplot_residence_type](https://user-images.githubusercontent.com/99194827/169442963-9c1a122c-946b-40cc-9ca8-ee960e57197a.png) <br>
-  Ada 2 unique value pada fitur ini. <br><br>
-  Gambar Barplot fitur smoking_status: <br>
+  There are 2 unique values. <br><br>
+  Barplot of smoking_status: <br>
   ![barplot_smoking_status](https://user-images.githubusercontent.com/99194827/169442981-df48ee1b-9caf-40b5-a193-a4245d221904.png) <br>
-  Ada 3 unique value pada fitur ini. Value unknown tidak memberikan insight berguna untuk proyek, karena sulit menjelaskan pengaruh merokok yang tidak diketahui terhadap diagnosis stroke.
-- memvisualisasikan korelasi fitur kategorik dengan fitur target menggunakan catplot <br>
-  Gambar Catplot fitur stroke vs fitur gender: <br>
+  There are 4 unique values. "Other" gives no useful insight for the project, because it's hard to explain connection between unknown smoking status with stroke diagnosis.
+- visualize correlation between categorical features and target feature with catplot <br>
+  Catplot of stroke vs gender: <br>
   ![catplot_gender](https://user-images.githubusercontent.com/99194827/169443024-0db4b527-9c9b-4b62-907e-2dfebac7692a.png) <br>
-  Rerata risiko stroke pada male dan female tidak jauh berbeda, sehingga dapat dikatakan fitur gender kurang memengaruhi fitur stroke. <br><br>
-  Gambar Catplot fitur stroke vs fitur ever_married: <br>
+  Average stroke risk for male and female have no big different, so it can be says that gender is less affecting stroke. <br><br>
+  Catplot of stroke vs ever_married: <br>
   ![catplot_ever_married](https://user-images.githubusercontent.com/99194827/169443045-dadbd14d-3230-4b28-a07f-e382d03e2777.png) <br>
-  Rerata risiko stroke pada pasien yang belum dan sudah menikah terlihat jauh berbeda, artinya fitur ever_married memengaruhi fitur stroke. <br><br>
-  Gambar Catplot fitur stroke vs fitur work_type: <br>
+  Average stroke risk between patient that haven't and have married seem very different, so it can be says that ever_married is affecting stroke. <br><br>
+  Catplot of stroke vs work_type: <br>
   ![catplot_work_type](https://user-images.githubusercontent.com/99194827/169443079-ff1e5b0b-c2d5-4cc5-bfc5-37b1fa56dcbb.png) <br>
-  Rerata risiko stroke pada tiap kategori pekerjaan terlihat bervariasi, artinya fitur work_type memengaruhi fitur stroke. <br><br>
-  Gambar Catplot fitur stroke vs fitur Residence_type: <br>
+  Average stroke risk in every categories are varied, so it can be says that work_type is affecting stroke. <br><br>
+  Catplot of stroke vs Residence_type: <br>
   ![catplot_residence_type](https://user-images.githubusercontent.com/99194827/169443113-21de49a1-8bb4-49aa-85f6-7183ebdcecdb.png) <br>
-  Rerata risiko stroke pada pasien yang tinggal di rural dan urban tidak jauh berbeda, sehingga dapat dikatakan fitur residence_type kurang memengaruhi fitur stroke. <br><br>
-  Gambar Catplot fitur stroke vs fitur smoking_status: <br>
+  Average stroke risk for rural and urban have no big different, so it can be says that residence_type is less affecting stroke. <br><br>
+  Catplot of stroke vs smoking_status: <br>
   ![catplot_smoking_status](https://user-images.githubusercontent.com/99194827/169443153-6c7cd720-aeb1-4a8d-bbfe-27518277380a.png) <br>
-  Rerata risiko stroke pada tiap kategori status merokok terlihat bervariasi, artinya fitur smoking_status memengaruhi fitur stroke.
-- memvisualisasikan korelasi fitur numerik dengan fitur target menggunakan heatmap <br>
-  Gambar Heatmap fitur numerik: <br>
+  Average stroke risk in every categories are varied, so it can be says that smoking_status is affecting stroke.
+- visualize correlation between numerical features and target feature with heatmap <br>
+  Heatmap: <br>
   ![heatmap](https://user-images.githubusercontent.com/99194827/169443172-55adf28d-b9f7-47a4-8705-39205b1cf2f0.png) <br>
-  Koefisien korelasi fitur bmi dan avg_glucose_level terhadap fitur stroke sangat kecil (<0.05), sehingga dua fitur ini dapat dikatakan kurang memengaruhi fitur stroke.
+  Coefficient of correlation of bmi and avg_glucose_level toward stroke are very low (<0.05), so these features can be say less affecting stroke.
 
 ## Data Preparation ##
-Tahap-tahap yang dilakukan dalam data preparation, adalah:
+Stages of data preparation:
 ### Data Cleaning ###
-Beberapa hal yang dilakukan pada tahap ini, adalah:
-- Fitur id dihapus <br>
-  Hal ini dilakukan karena fitur id hanya berisi primary key (identifier unik) yang tidak akan memengaruhi diagnosis stroke.
-- Missing value dihapus <br>
-  Missing value dideteksi dengan metode .info() dan dihapus dengan metode .dropna().
-- Outlier dihapus <br>
-  Outlier dideteksi di visualisasi boxplot terhadap fitur-fitur numerik. Melalui visualisasi boxplot yang telah dilakukan sebelumnya, fitur avg_glucose_level dan bmi terdeteksi memiliki outlier. Outlier-outlier tersebut dihapus menggunakan metode IQR, dengan IQR adalah selisih antara kuartil atas dan kuartil bawah. x dikatakan sebagai outlier apabila memenuhi:
+Few things done in this stage:
+- Deletion of id feature <br>
+  This is done because id only unique identifier that clearly won't affect stroke diagnosis.
+- Deletion of missing values <br>
+  Missing values are detected with .info() method and deleted with .dropna() method.
+- Deletion of Outlier <br>
+  Outlier detected in boxplot visualization. Through those visualizations, avg_glucose_level and bmi are detected having outliers. Outliers deleted with IQR method, while IQR stands for substraction between upper and lower quartile. x can be says as an outlier if and only if:
   ```
   x < Q1 - 1.5*IQR atau x > Q3 + 1.5*IQR
   
   ```
-  Gambar boxplot fitur avg_glucose_level sebelum dan sesudah handling outlier: <br>
+  Boxplot of avg_glucose_level before and after outliers handling: <br>
   ![boxplot_avg_glucose_level_before](https://user-images.githubusercontent.com/99194827/169443367-a5fa02c3-359e-4ebf-bcaa-a59c627d88c6.png)
   ![boxplot_avg_glucose_level_after](https://user-images.githubusercontent.com/99194827/169443372-15576a1f-e7c5-4617-8629-2a7ef80d7460.png) <br><br>
-  Gambar boxplot fitur bmi sebelum dan sesudah handling outlier: <br>
+  Boxplot of bmi before and after outliers handling: <br>
   ![boxplot_bmi_before](https://user-images.githubusercontent.com/99194827/169443477-61410c9d-76f9-4637-8208-c12e9e5a1ee5.png)
   ![boxplot_bmi_after](https://user-images.githubusercontent.com/99194827/169443490-31a4b6be-edf6-46fd-a46d-2471e7c25f9f.png)
 
 ### Feature Selection ###
-Beberapa hal yang dilakukan pada tahap ini, adalah:
-- Kategori yang tidak memberikan insight berguna dari tiap fitur kategorik dihapus <br>
-  Setelah melakukan visualisasi barplot dari tiap fitur kategorik, distinct value beserta jumlah data untuk tiap value dapat diketahui. Kategori other dari fitur gender dan unknown dari fitur smoking_status dihapus, karena tidak memberikan insight yang berguna terhadap proyek.
-- Fitur kategorik yang tidak berpengaruh terhadap fitur stroke dihapus <br>
-  Fitur kategorik dikatakan tidak berpengaruh terhadap fitur stroke jika rerata risiko stroke terhadap kategori dari suatu fitur kategorik relatif sama. Untuk memudahkan pembandingan kriteria ini, visualisasi catplot digunakan. Dilihat dari catplot yang telah dibuat, fitur kategorik yang tidak memenuhi persyaratan ini adalah fitur gender dan residence_type, sehingga kedua fitur tersebut dihapus.
-- Fitur numerik yang tidak berpengaruh terhadap fitur stroke dihapus <br>
-  Fitur numerik dikatakan tidak berpengaruh terhadap fitur stroke jika koefisien korelasinya bernilai kurang dari 0.05. Untuk memudahkan pembandingan kriteria ini, visualisasi heatmap digunakan. Dilihat dari heatmap yang telah dibuat, fitur numerik yang tidak memenuhi persyaratan ini adalah fitur avg_glucose_level dan bmi, sehingga kedua fitur dihapus.
+Few things done in this stage:
+- Deletion of "useless" categories from categorical features <br>
+  After barplot visualization conducted from each categorical features, distinct value and number of data for each values are known. "Other" from gender and "Unknown" from smoking_status are deleted, because they give no significant insights for the project.
+- Deletion of categorical features that less affecting stroke <br>
+  According to catplot visualization, gender and residence_type are deleted because categories of each features have no significant different correlation each other.
+- Deletion of numerical features that less affecting stroke <br>
+  According to heatmap visualization, avg_glucose_level and bmi are deleted, because they have low correlation with stroke feature.
 ### Data Transform ###
-Beberapa hal yang dilakukan pada tahap ini, adalah:
+Few things done in this stage:
 - Label Encoding <br>
-  Metode label encoding yang digunakan adalah One Hot Encoding. Dengan menggunakan metode ini, fitur kategorik diubah menjadi data kuantitatif, sehingga data dapat digunakan untuk pembelajaran model. Data dari satu fitur akan digenerasi menjadi fitur-fitur dengan jumlah setara dengan jumlah distinct value dari fitur tersebut. <br>
-  Gambar Fitur ever_married sebelum encoding <br>
+  Label encoding used here is One Hot Encoding. By using this method, categorical features' values turned as numerical value, data can be learned by the model. <br>
+  ever_married before encoding <br>
   ![ever_married_before](https://user-images.githubusercontent.com/99194827/169443657-e97ee74b-1f82-475b-8e1b-09af999ed4c1.png) <br><br>
-  Gambar Fitur ever_married setelah encoding <br>
+  ever_married after encoding <br>
   ![ever_married_after](https://user-images.githubusercontent.com/99194827/169443675-201220f9-231d-4a43-840c-591b3fd13103.png)
 - Split dataset <br>
-  Dataset dibagi menjadi data training dan testing dengan rasio 80:20. Angka ini dipilih, karena rasio ini rasio yang cukup mengingat dataset tidak terlalu besar. Parameter stratify didefinisikan setara dengan fitur target, agar proporsi label pada data train dan test setara dengan proporsi label pada dataset keseluruhan.
-- Normalisasi <br>
-  Normalisasi mengubah nilai dari suatu fitur menjadi berada pada rentang 0 hingga 1. Sebuah nilai akan ditampilkan sebagai rasio antara selisih nilai tersebut dengan nilai minimal fitur dan selisih nilai maksimal dengan nilai minimal fitur, sebagai berikut. <br>
+  Dataset splitted as data training and testing with 80:20 ratio. Parameter of stratify defined to be equal with target feature, so proportion of label on training and testing data equal with the whole dataset.
+- Normalization <br>
+  Normalization changes value from a feature to be in range 0 to 1. A value will be transformed as follows: <br>
   ![Normalisasi](https://www.oreilly.com/library/view/regression-analysis-with/9781788627306/assets/ffb3ac78-fd6f-4340-aa92-cde8ae0322d6.png)
 
 
 ## Modeling ##
-Model yang digunakan dalam proyek ini ada 2, yaitu KNN dan Random Forest.
-- Model KNN melakukan klasifikasi dari suatu nilai dengan melihat klasifikasi dari titik-titik yang dekat dengan nilai tersebut. Kedekatan titik-titik data dengan suatu nilai diukur dengan formula jarak euclidean. Parameter n_neighbors mendefinisikan jumlah titik terdekat yang memengaruhi klasifikasi suatu nilai. Pada proyek ini, parameter n_neighbors yang digunakan adalah 5. Artinya, klasifikasi suatu nilai bergantung pada klasifikasi dari 5 titik data terdekat dari nilai tersebut. Apabila 3 titik data terdekat diklasifikasikan sebagai kategori 1, maka nilai tersebut akan diklasifikasikan sebagai kategori 1 juga. Nilai n_neighbors tersebut dipilih agar waktu training tidak terlalu lama. <br>
-  KNN memiliki kelebihan, yaitu sangat mudah untuk diterapkan. Sementara itu, kekurangan dari KNN adalah KNN kurang bekerja baik pada dataset besar dengan dimensi data yang besar serta membutuhkan normalisasi/standardisasi.
-- Model Random Forest melakukan klasifikasi dengan bantuan decision tree. Decision tree sendiri adalah metode klasifikasi suatu nilai dengan menanyakan pertanyaan-pertanyaan bertingkat mengenai kategori dari nilai tersebut. Hasil akhir dari decision tree adalah kategori klasifikasi dari nilai. Random Forest adalah metode klasifikasi yang menggabungkan hasil klasifikasi dari beberapa decision tree. Pada proyek ini, parameter n_estimators yang digunakan adalah 50. Artinya, klasifikasi suatu nilai bergantung pada klasifikasi dari 50 decision tree. Apabila 51 decision tree mengklasifikasikan nilai sebagai kategori 1, maka nilai tersebut akan diklasifikasikan sebagai kategori 1. Nilai n_estimators tersebut dipilih agar waktu training tidak terlalu lama. <br>
-  Random Forest memiliki kelebihan, yaitu tidak memerlukan normalisasi/standardisasi. Sementara itu, kekurangan dari Random Forest adalah membutuhkan waktu training lebih lama. <br>
+Model used here are KNN and Random Forest.
+- KNN is classifying a value based on classification of nearest dots with the value. Closeness of dots with the value is measured with euclidean distance. Parameter of n_neighbors defined number of nearest dots that will affect classification of a value. In thi project, parameter of n_neighbors being used is 5, simply means that classification of a value depends on classification of 5 nearest dots from the value. If the 3 nearest dots classified as 1, then the value will be classified as 1, too. <br>
+  KNN has advantage, which is very easy to apply. Meanwhile, the advantage of KNN is that it isn't work good to big dataset with high dimention and also need normalization/standardization.
+- Random Forest is classifying a value with help from decision trees. Decision tree is a classification method with asking compound questions about the value. Final result of a decision tree is the classified category. Random Forest is classification that combine classification result from many decision trees. In this project, parameter of n_estimators being used is 50, simply means that classification of a value depends on result from 50 decision trees. If the 26 decision tree classifying a value as 1, then the value will be classified as 1, too. <br>
+  Random Forest has advantage kelebihan, where they need no normalization/standardization. Meanwhile, the advantage of Random Forest is that it needs longer training time. <br>
 
-Melalui metrik-metrik evaluasi yang digunakan, model terbaik untuk diagnosis stroke adalah model KNN. Hal ini dikarenakan nilai accuracy untuk model KNN dan Random Forest sudah memenuhi kriteria (>90%) dan besar nilai fitting_score (tanpa memerhatikan tanda) dari model KNN lebih kecil.
+According to evaluation metrics used here, best model for stroke diagnosis is KNN. Accuracy score for KNN and Random Forest has fulfill desired criteria (>90%) and fitting_score from KNN is lower.
 
 ## Evaluation ##
-Metrik evaluasi yang digunakan ada 2, yaitu Fitting Score dan Accuracy. Metrik accuracy menjadi satisficing metric dan metrik fitting score menjadi optimizing metric.
-- Metrik Fitting Score adalah selisih antara nilai MSE pada data testing dengan MSE pada data training. Metrik ini menggambarkan jenis fitting data yang terjadi. MSE mengukur rerata dari kuadrat dari selisih antara hasil prediksi dengan data sebenarnya. Model dengan besar fitting score (tanpa memerhatikan tanda) paling rendah adalah model yang baik. <br>
-  Gambar 17 Formula MSE: <br>
+There are 2 evaluation metrics used here, which are Fitting Score and Accuracy. Accuracy become satisficing metric and fitting score become optimizing metric.
+- Fitting Score is substraction between MSE on testing and MSE on training data. This metric describes type of data fitting that happened. MSE measures average of powered of substraction between prediction value and actual value. Model with lower fitting score is better model. <br>
+  Formula MSE: <br>
   ![MSE](https://vedexcel.com/wp-content/uploads/2020/12/MSE_Python.gif)
-- Metrik Accuracy diterapkan untuk menentukan akurasi model. Accuracy menghitung rasio antara jumlah prediksi yang benar (True Positive dan True Negative) dengan jumlah data testing. Model dengan accuracy >90% sudah dikatakan baik pada proyek ini.
-  Gambar 18 Formula Accuracy: <br>
+- Accuracy measures ratio between number of total true prediction (True Positive dan True Negative) with number of total prediction. Model with accuracy >90% can be said as good in this project.
+  Formula Accuracy: <br>
   ![Accuracy](https://th.bing.com/th/id/OIP.XsegOFaHxkbrh5kIHoHn2wHaBX?pid=ImgDet&rs=1) <br>
 
-Melalui metrik-metrik evaluasi yang digunakan, model terbaik untuk diagnosis stroke adalah model KNN. Hal ini dikarenakan nilai accuracy untuk model KNN dan Random Forest sudah memenuhi kriteria (>90%) dan besar nilai fitting_score (tanpa memerhatikan tanda) dari model KNN lebih kecil. <br>
+According to evaluation metrics used here, best model for stroke diagnosis is KNN. Accuracy score for KNN and Random Forest has fulfill desired criteria (>90%) and fitting_score from KNN is lower. <br>
 ![evaluation](https://user-images.githubusercontent.com/99194827/169443755-64a00f3b-8b2e-4016-b7ea-449d326d3fa3.png)
 
-## Referensi ##
+## Reference ##
 Delima, Mihardja LK, Ghani L. 2016. Faktor risiko dominan penderita stroke di indonesia. Buletin Penelitian Kesehatan. 44 (1): 49-58. doi: 10.22435/bpk.v44i1.4949.49-58
